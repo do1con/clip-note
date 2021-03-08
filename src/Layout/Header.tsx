@@ -6,12 +6,13 @@ function Header(): JSX.Element {
 	return (
 		<Container fluid>
 			<Row>
+				<Col lg={'auto'}>
+					<H1>Clip Note</H1>
+				</Col>
 				<Col>
-					<H1>C</H1>
-					<Tabs defaultActiveKey="home" id="uncontrolled-tab-example">
-						<Tab eventKey="home" title="Home"></Tab>
-						<Tab eventKey="profile" title="Profile"></Tab>
-						<Tab eventKey="contact" title="Contact"></Tab>
+					<Tabs defaultActiveKey="memos" style={{ marginTop: '5px', marginBottom: '5px' }}>
+						<Tab eventKey="memos" title="Memos"></Tab>
+						<Tab eventKey="settings" title="Settings"></Tab>
 					</Tabs>
 				</Col>
 			</Row>
@@ -24,8 +25,10 @@ const H1 = styled.h1`
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	color: transparent;
-	font-size: 540px;
-	display: inline;
+	font-size: 35px;
+	display: inline-block;
+	margin-top: 5px;
+	margin-bottom: 5px;
 `;
 
 export default Header;
