@@ -1,7 +1,8 @@
 /* global chrome */
-import React, { useRef } from 'react';
+import React, { useRef, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Form } from 'react-bootstrap';
+import { Context } from '../Context/ContextProvider';
 import Memo from '../Component/Memo';
 
 const TextBoxWrapper = styled.div`
@@ -17,6 +18,10 @@ const MemoContainerWrapper = styled.div`
 `;
 
 function MemoContainer(): JSX.Element {
+  const { memos } = useContext(Context);
+  useEffect(() => {
+    console.log(memos);
+  });
   const resizeTextArea = (textAreaRef: React.RefObject<HTMLTextAreaElement>) => {
     const textAreaRefDom = textAreaRef.current;
     if (textAreaRefDom) {
