@@ -1,0 +1,77 @@
+
+// {
+//   "extends": [
+//     "prettier",
+//     "airbnb",
+//     "airbnb/hooks",
+//     "plugin:@typescript-eslint/recommended",
+//     "plugin:prettier/recommended"
+//   ],
+//   "parser": "@typescript-eslint/parser",
+//   "plugins": ["@typescript-eslint"],
+//   "rules": {
+//     "properties": 0,
+//     "prettier/prettier": [
+//       "error",
+//       {
+//         "endOfLine": "auto"
+//       }
+//     ],
+//     "no-use-before-define": "off",
+//     "@typescript-eslint/no-use-before-define": ["error"],
+//     "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+//   },
+//   "env": {
+//     "webextensions": true
+//   },
+//   "globals": {
+//     "chrome": true
+//   }
+// }
+
+
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "react-hooks"],
+  "extends": [
+    "airbnb",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "properties": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+   ]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
+  "env": {
+    "webextensions": true
+  },
+  "globals": {
+    "chrome": true
+  }
+}
