@@ -18,7 +18,7 @@ function MemoContainer(): JSX.Element {
     <MemoContainerWrapper>
       <MemoTextArea />
       {memos.map((memo, index) => (
-        <Memo memo={memo} key={String(memo + index)} />
+        <Memo memo={memo} key={String(memo + index)} index={index} />
       ))}
     </MemoContainerWrapper>
   );

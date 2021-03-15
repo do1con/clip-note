@@ -26,6 +26,16 @@ const reducer = (state = initialState, action: any): ClipNoteStates => {
         ...state,
         memos: [action.value, ...state.memos],
       };
+    case 'EDIT/MEMO':
+      return {
+        ...state,
+        memos: state.memos.map((memo, index) => {
+          if (index === action.index) {
+            return action.value;
+          }
+          return memo;
+        }),
+      };
     default:
       throw new Error();
   }

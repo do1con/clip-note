@@ -10,7 +10,7 @@ const TextBoxWrapper = styled.div`
 
 function MemoTextArea(): JSX.Element {
   const { memos, contextDispatch } = useContext(Context);
-  const resizeTextArea = (textAreaRef: React.RefObject<HTMLTextAreaElement>) => {
+  const handleResizeTextArea = (textAreaRef: React.RefObject<HTMLTextAreaElement>) => {
     const textAreaRefDom = textAreaRef.current;
     if (textAreaRefDom) {
       textAreaRefDom.style.height = '1px';
@@ -18,7 +18,7 @@ function MemoTextArea(): JSX.Element {
     }
   };
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const addMemo = () => {
+  const handleAddMemo = () => {
     if (textAreaRef) contextDispatch({ type: 'ADD/MEMO', value: textAreaRef?.current?.value });
   };
   return (
@@ -29,9 +29,9 @@ function MemoTextArea(): JSX.Element {
             as="textarea"
             placeholder="Type here."
             ref={textAreaRef}
-            onKeyDown={() => resizeTextArea(textAreaRef)}
-            onKeyUp={() => resizeTextArea(textAreaRef)}
-            onBlur={addMemo}
+            onKeyDown={() => handleResizeTextArea(textAreaRef)}
+            onKeyUp={() => handleResizeTextArea(textAreaRef)}
+            onBlur={handleAddMemo}
             style={{
               overflow: 'hidden',
               transition: 'height 200ms',
