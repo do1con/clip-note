@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Form } from 'react-bootstrap';
 import { Context } from '../Context/ContextProvider';
@@ -17,8 +17,8 @@ function MemoContainer(): JSX.Element {
   return (
     <MemoContainerWrapper>
       <MemoTextArea />
-      {memos.map((memo) => (
-        <Memo memo={memo} key={memo} />
+      {memos.map((memo, index) => (
+        <Memo memo={memo} key={String(memo + index)} />
       ))}
     </MemoContainerWrapper>
   );

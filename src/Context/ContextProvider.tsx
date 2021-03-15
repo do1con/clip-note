@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 
 type ClipNoteStates = {
   memos: Array<string>;
+  contextDispatch?: any;
 };
 
 const initialState: ClipNoteStates = {
@@ -19,11 +20,12 @@ const initialState: ClipNoteStates = {
 export const Context = React.createContext(initialState);
 
 const reducer = (state = initialState, action: any): ClipNoteStates => {
-  const copiedState = state;
   switch (action.type) {
     case 'ADD/MEMO':
-      copiedState.memos.unshift(action.value);
-      return copiedState;
+      return {
+        ...state,
+        memos: [action.value, ...state.memos],
+      };
     default:
       throw new Error();
   }
@@ -31,5 +33,5 @@ const reducer = (state = initialState, action: any): ClipNoteStates => {
 
 export default function ContextProvider({ children }: { children: React.ReactNode }): JSX.Element {
   const [state, contextDispatch] = useReducer(reducer, initialState);
-  return <Context.Provider value={initialState}>{children}</Context.Provider>;
+  return <Context.Provider value={{ memos: state.memos, contextDispatch }}>{children}</Context.Provider>;
 }
