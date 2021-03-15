@@ -17,11 +17,10 @@ function MemoTextArea(): JSX.Element {
       textAreaRefDom.style.height = `${textAreaRefDom.scrollHeight}px`;
     }
   };
-  const addMemo = () => {
-    contextDispatch({ type: 'ADD/MEMO', value: '하하하' });
-  };
-
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const addMemo = () => {
+    if (textAreaRef) contextDispatch({ type: 'ADD/MEMO', value: textAreaRef?.current?.value });
+  };
   return (
     <TextBoxWrapper>
       <Form>
