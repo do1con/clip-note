@@ -1,14 +1,9 @@
-/* global chrome */
 import React, { useRef, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Form } from 'react-bootstrap';
 import { Context } from '../Context/ContextProvider';
 import Memo from '../Component/Memo';
-
-const TextBoxWrapper = styled.div`
-  margin: 5px;
-  width: calc(20% - 10px);
-`;
+import MemoTextArea from '../Component/MemoTextArea';
 
 const MemoContainerWrapper = styled.div`
   display: flex;
@@ -19,34 +14,9 @@ const MemoContainerWrapper = styled.div`
 
 function MemoContainer(): JSX.Element {
   const { memos } = useContext(Context);
-  const resizeTextArea = (textAreaRef: React.RefObject<HTMLTextAreaElement>) => {
-    const textAreaRefDom = textAreaRef.current;
-    if (textAreaRefDom) {
-      textAreaRefDom.style.height = '1px';
-      textAreaRefDom.style.height = `${textAreaRefDom.scrollHeight}px`;
-    }
-  };
-
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   return (
     <MemoContainerWrapper>
-      <TextBoxWrapper>
-        <Form>
-          <Form.Group controlId="memoTextForm">
-            <Form.Control
-              as="textarea"
-              placeholder="Type here."
-              ref={textAreaRef}
-              onKeyDown={() => resizeTextArea(textAreaRef)}
-              onKeyUp={() => resizeTextArea(textAreaRef)}
-              style={{
-                overflow: 'hidden',
-                transition: 'height 200ms',
-              }}
-            />
-          </Form.Group>
-        </Form>
-      </TextBoxWrapper>
+      <MemoTextArea />
       {memos.map((memo) => (
         <Memo memo={memo} key={memo} />
       ))}
