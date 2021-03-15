@@ -1,44 +1,17 @@
 import React, { useReducer } from 'react';
 
 type ClipNoteStates = {
-  memos: Array<{
-    index: number;
-    content: string;
-  }>;
+  memos: Array<string>;
 };
 
 const initialState: ClipNoteStates = {
   memos: [
-    {
-      index: 1,
-      content:
-        '테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
-    },
-    {
-      index: 2,
-      content:
-        '테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
-    },
-    {
-      index: 3,
-      content:
-        '테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
-    },
-    {
-      index: 4,
-      content:
-        '테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
-    },
-    {
-      index: 5,
-      content:
-        '테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
-    },
-    {
-      index: 6,
-      content:
-        '테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
-    },
+    '1테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
+    '2테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
+    '3테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
+    '4테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
+    '5테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
+    '6테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
   ],
 };
 
@@ -46,10 +19,11 @@ const initialState: ClipNoteStates = {
 export const Context = React.createContext(initialState);
 
 const reducer = (state = initialState, action: any): ClipNoteStates => {
+  const copiedState = state;
   switch (action.type) {
     case 'ADD/MEMO':
-      state.memos.unshift(action.value);
-      return state;
+      copiedState.memos.unshift(action.value);
+      return copiedState;
     default:
       throw new Error();
   }

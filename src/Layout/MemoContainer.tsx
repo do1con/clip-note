@@ -19,9 +19,6 @@ const MemoContainerWrapper = styled.div`
 
 function MemoContainer(): JSX.Element {
   const { memos } = useContext(Context);
-  useEffect(() => {
-    console.log(memos);
-  });
   const resizeTextArea = (textAreaRef: React.RefObject<HTMLTextAreaElement>) => {
     const textAreaRefDom = textAreaRef.current;
     if (textAreaRefDom) {
@@ -50,16 +47,9 @@ function MemoContainer(): JSX.Element {
           </Form.Group>
         </Form>
       </TextBoxWrapper>
-      <Memo />
-      <Memo />
-      <Memo />
-      <Memo />
-      <Memo />
-      <Memo />
-      <Memo />
-      <Memo />
-      <Memo />
-      <Memo />
+      {memos.map((memo) => (
+        <Memo memo={memo} key={memo} />
+      ))}
     </MemoContainerWrapper>
   );
 }
