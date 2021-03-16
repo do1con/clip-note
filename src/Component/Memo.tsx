@@ -1,6 +1,7 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Card, Form } from 'react-bootstrap';
+import { BsPencilSquare, BsFillTrashFill } from 'react-icons/bs';
 import { Context } from '../Context/ContextProvider';
 
 interface propType {
@@ -14,23 +15,27 @@ const TextBoxWrapper = styled.div`
   position: relative;
 `;
 
-const TextArea = styled.textarea<{ editMode: boolean }>`
+const TextArea = styled.textarea`
   resize: none;
   display: block;
   overflow: hidden;
   width: 100%;
   padding: 20px;
-  background-color: ${(props) => (props.editMode ? '#f1f1f1;' : '#ffffff;')};
-  caret-color: linear-gradient(45deg, rgba(141, 197, 66, 1) 0%, rgba(195, 140, 206, 1) 87%);
 `;
 
 const ButtonWrapper = styled.div<{ rightPosition: number }>`
   width: 26px;
   height: 26px;
-  background-color: red;
+  background-color: #ffffff;
   position: absolute;
   top: -13px;
   right: ${(props) => props.rightPosition}px;
+`;
+
+const Button = styled.button`
+  border: 0;
+  padding: 0;
+  background-color: rgba(255, 255, 255, 0);
 `;
 
 function Memo({ memo, index }: propType): JSX.Element {
@@ -52,6 +57,9 @@ function Memo({ memo, index }: propType): JSX.Element {
     setEditMode(false);
     if (textAreaRef) contextDispatch({ type: 'EDIT/MEMO', value: textAreaRef?.current?.value, index });
   };
+  const handleClickDelete = () => {
+    contextDispatch({ type: 'DELETE/MEMO', deleteIndex: index });
+  };
   return (
     <TextBoxWrapper>
       <TextArea
@@ -60,10 +68,24 @@ function Memo({ memo, index }: propType): JSX.Element {
         readOnly={!editMode}
         onBlur={handleAddMemo}
         onDoubleClick={handleDoubleClickMemo}
-        editMode={editMode}
       />
-      <ButtonWrapper rightPosition={13}>수정</ButtonWrapper>
-      <ButtonWrapper rightPosition={44}>삭제</ButtonWrapper>
+      <ButtonWrapper rightPosition={13}>
+        <Button type="button">
+          <BsFillTrashFill style={{ width: '26px', color: 'red' }} onClick={handleClickDelete} />
+        </Button>
+      </ButtonWrapper>
+      <ButtonWrapper rightPosition={44}>
+        <Button type="button">
+          <BsPencilSquare
+            style={{
+              width: '26px',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              color: editMode ? '#8dc542' : '#111111',
+            }}
+          />
+        </Button>
+      </ButtonWrapper>
     </TextBoxWrapper>
   );
 }

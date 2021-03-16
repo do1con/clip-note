@@ -36,6 +36,11 @@ const reducer = (state = initialState, action: any): ClipNoteStates => {
           return memo;
         }),
       };
+    case 'DELETE/MEMO':
+      return {
+        ...state,
+        memos: state.memos.filter((memo, index) => index !== action.deleteIndex),
+      };
     default:
       throw new Error();
   }
