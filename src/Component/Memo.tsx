@@ -1,28 +1,39 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Card, Form } from 'react-bootstrap';
-import TextareaAutosize from 'react-textarea-autosize';
 import { Context } from '../Context/ContextProvider';
 
-interface props {
+interface propType {
   memo: string;
   index: number;
 }
 
 const TextBoxWrapper = styled.div`
-  margin: 5px;
-  width: calc(20% - 10px);
+  margin: 10px;
+  width: calc(20% - 20px);
+  position: relative;
 `;
 
-const TextArea = styled.textarea`
+const TextArea = styled.textarea<{ editMode: boolean }>`
   resize: none;
   display: block;
   overflow: hidden;
   width: 100%;
-  padding: 10px;
+  padding: 20px;
+  background-color: ${(props) => (props.editMode ? '#f1f1f1;' : '#ffffff;')};
+  caret-color: linear-gradient(45deg, rgba(141, 197, 66, 1) 0%, rgba(195, 140, 206, 1) 87%);
 `;
 
-function Memo({ memo, index }: props): JSX.Element {
+const ButtonWrapper = styled.div<{ rightPosition: number }>`
+  width: 26px;
+  height: 26px;
+  background-color: red;
+  position: absolute;
+  top: -13px;
+  right: ${(props) => props.rightPosition}px;
+`;
+
+function Memo({ memo, index }: propType): JSX.Element {
   const [editMode, setEditMode] = useState(false);
   const { contextDispatch } = useContext(Context);
   const handleDoubleClickMemo = () => {
@@ -38,6 +49,7 @@ function Memo({ memo, index }: props): JSX.Element {
     }
   }, [currentValue]);
   const handleAddMemo = () => {
+    setEditMode(false);
     if (textAreaRef) contextDispatch({ type: 'EDIT/MEMO', value: textAreaRef?.current?.value, index });
   };
   return (
@@ -48,7 +60,10 @@ function Memo({ memo, index }: props): JSX.Element {
         readOnly={!editMode}
         onBlur={handleAddMemo}
         onDoubleClick={handleDoubleClickMemo}
+        editMode={editMode}
       />
+      <ButtonWrapper rightPosition={13}>수정</ButtonWrapper>
+      <ButtonWrapper rightPosition={44}>삭제</ButtonWrapper>
     </TextBoxWrapper>
   );
 }
