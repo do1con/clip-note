@@ -22,9 +22,14 @@ export const Context = React.createContext(initialState);
 const reducer = (state = initialState, action: any): ClipNoteStates => {
   switch (action.type) {
     case 'ADD/MEMO':
+      if (action.value) {
+        return {
+          ...state,
+          memos: [action.value, ...state.memos],
+        };
+      }
       return {
         ...state,
-        memos: [action.value, ...state.memos],
       };
     case 'EDIT/MEMO':
       return {

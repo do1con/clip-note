@@ -12,6 +12,18 @@ const TextBoxWrapper = styled.div`
   margin: 10px;
   width: calc(20% - 20px);
   position: relative;
+  @media (max-width: 1024px) {
+    width: calc(25% - 20px);
+  }
+  @media (max-width: 840px) {
+    width: calc(33% - 20px);
+  }
+  @media (max-width: 630px) {
+    width: calc(50% - 20px);
+  }
+  @media (max-width: 500px) {
+    width: calc(100% - 20px);
+  }
 `;
 
 const TextArea = styled.textarea<{ editMode: boolean }>`
@@ -61,6 +73,9 @@ function Memo({ memo, index }: propType): JSX.Element {
     setEditMode(false);
     contextDispatch({ type: 'EDIT/MEMO', value: textAreaRef?.current?.value, index });
   };
+  const handleOnChangeMemo = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCurrentValue(event.target.value);
+  };
   const handleClickDelete = () => {
     contextDispatch({ type: 'DELETE/MEMO', deleteIndex: index });
   };
@@ -89,7 +104,7 @@ function Memo({ memo, index }: propType): JSX.Element {
         onBlur={handleAddMemo}
         onDoubleClick={handleDoubleClickMemo}
         editMode={editMode}
-        autoFocus={editMode}
+        onChange={handleOnChangeMemo}
       />
       <ButtonWrapper rightPosition={13}>
         <Button type="button" onClick={handleClickDelete}>
