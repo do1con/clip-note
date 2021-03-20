@@ -1,6 +1,5 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { Card, Form } from 'react-bootstrap';
 import { BsPencilSquare, BsFillTrashFill } from 'react-icons/bs';
 import { Context } from '../Context/ContextProvider';
 
@@ -15,12 +14,14 @@ const TextBoxWrapper = styled.div`
   position: relative;
 `;
 
-const TextArea = styled.textarea`
+const TextArea = styled.textarea<{ editMode: boolean }>`
   resize: none;
   display: block;
   overflow: hidden;
   width: 100%;
   padding: 20px;
+  border: ${(props) => (props.editMode ? '1px solid #343434' : '1px solid #ced4da')};
+  color: ${(props) => (props.editMode ? '#121212' : '#656565')};
 `;
 
 const ButtonWrapper = styled.div<{ rightPosition: number }>`
@@ -40,10 +41,9 @@ const Button = styled.button`
 
 function Memo({ memo, index }: propType): JSX.Element {
   const [editMode, setEditMode] = useState(false);
+  const [hoverDeleteBtn, setHoverDeleteBtn] = useState(false);
+  const [hoverEditBtn, setHoverEditBtn] = useState(false);
   const { contextDispatch } = useContext(Context);
-  const handleDoubleClickMemo = () => {
-    setEditMode(true);
-  };
   const [currentValue, setCurrentValue] = useState('');
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
@@ -53,12 +53,32 @@ function Memo({ memo, index }: propType): JSX.Element {
       textAreaRef.current.style.height = `${scrollHeight}px`;
     }
   }, [currentValue]);
+  const handleDoubleClickMemo = () => {
+    setEditMode(true);
+    return textAreaRef.current?.focus();
+  };
   const handleAddMemo = () => {
     setEditMode(false);
-    if (textAreaRef) contextDispatch({ type: 'EDIT/MEMO', value: textAreaRef?.current?.value, index });
+    contextDispatch({ type: 'EDIT/MEMO', value: textAreaRef?.current?.value, index });
   };
   const handleClickDelete = () => {
     contextDispatch({ type: 'DELETE/MEMO', deleteIndex: index });
+  };
+  const handleClickEdit = () => {
+    setEditMode(true);
+    return textAreaRef.current?.focus();
+  };
+  const handleMouseOverDeleteBtn = () => {
+    setHoverDeleteBtn(true);
+  };
+  const handleMouseLeaveDeleteBtn = () => {
+    setHoverDeleteBtn(false);
+  };
+  const handleMouseOverEditBtn = () => {
+    setHoverEditBtn(true);
+  };
+  const handleMouseLeaveEditBtn = () => {
+    setHoverEditBtn(false);
   };
   return (
     <TextBoxWrapper>
@@ -68,21 +88,27 @@ function Memo({ memo, index }: propType): JSX.Element {
         readOnly={!editMode}
         onBlur={handleAddMemo}
         onDoubleClick={handleDoubleClickMemo}
+        editMode={editMode}
+        autoFocus={editMode}
       />
       <ButtonWrapper rightPosition={13}>
-        <Button type="button">
-          <BsFillTrashFill style={{ width: '26px', color: 'red' }} onClick={handleClickDelete} />
+        <Button type="button" onClick={handleClickDelete}>
+          <BsFillTrashFill
+            style={{ width: '26px', color: hoverDeleteBtn ? 'red' : 'pink' }}
+            onMouseOver={handleMouseOverDeleteBtn}
+            onMouseLeave={handleMouseLeaveDeleteBtn}
+          />
         </Button>
       </ButtonWrapper>
       <ButtonWrapper rightPosition={44}>
-        <Button type="button">
+        <Button type="button" onClick={handleClickEdit}>
           <BsPencilSquare
             style={{
               width: '26px',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              color: editMode ? '#8dc542' : '#111111',
+              color: editMode || hoverEditBtn ? 'blue' : 'skyblue',
             }}
+            onMouseOver={handleMouseOverEditBtn}
+            onMouseLeave={handleMouseLeaveEditBtn}
           />
         </Button>
       </ButtonWrapper>
