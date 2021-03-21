@@ -3,16 +3,21 @@ import React, { useReducer } from 'react';
 type ClipNoteStates = {
   memos: Array<string>;
   contextDispatch?: any;
+  length?: any;
 };
 
 const initialState: ClipNoteStates = {
   memos: [
-    '1테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
-    '2테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
-    '3테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
-    '4테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
-    '5테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
-    '6테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.테스트용 문서입니다.',
+    `README.txt
+1. Clip Note is developed by Kim Seongsoo. kss7547@gmail.com
+2. Your memos will stored in Google Account. If You want further infomations, check on https://support.google.com/chrome/answer/165139?co=GENIE.Platform%3DDesktop&hl=en
+3. Clip Note does not fully guarantee your notes. It just saves your notes to your Google Account.
+So, if it's really important information, ex) bank account password, bitcoin account information, etc.
+It is recommended not to save to Clip Note.`,
+    `HOW TO USE Clip Note
+1. write on 'Type here...' section. if You click other area, it will save it automatically.
+2. You can edit, or delete your clip. to edit, click on pencil icon, or double click on clip.
+to delete, click trash can icon.`,
   ],
 };
 
@@ -21,7 +26,23 @@ export const Context = React.createContext(initialState);
 
 const reducer = (state = initialState, action: any): ClipNoteStates => {
   switch (action.type) {
+    case 'GETSTOREDMEMO/MEMO':
+      if (action.value.length >= 1) {
+        return {
+          memos: action.value.reverse(),
+        };
+      }
+      return {
+        ...state,
+      };
     case 'ADD/MEMO':
+      if (action.value) {
+        chrome.storage.sync.get('memos', function (result) {
+          const { memos } = result;
+          memos.push(action.value);
+          chrome.storage.sync.set({ memos });
+        });
+      }
       if (action.value) {
         return {
           ...state,
@@ -32,6 +53,17 @@ const reducer = (state = initialState, action: any): ClipNoteStates => {
         ...state,
       };
     case 'EDIT/MEMO':
+      chrome.storage.sync.get('memos', function (result) {
+        const { memos } = result;
+        chrome.storage.sync.set({
+          memos: memos.map((memo: string, index: number) => {
+            if (index === action.index) {
+              return action.value;
+            }
+            return memo;
+          }),
+        });
+      });
       return {
         ...state,
         memos: state.memos.map((memo, index) => {
@@ -42,9 +74,18 @@ const reducer = (state = initialState, action: any): ClipNoteStates => {
         }),
       };
     case 'DELETE/MEMO':
+      chrome.storage.sync.get('memos', function (result) {
+        const { memos } = result;
+        chrome.storage.sync.set({ memos: memos.filter((memo: string, index: number) => index !== action.deleteIndex) });
+      });
       return {
         ...state,
         memos: state.memos.filter((memo, index) => index !== action.deleteIndex),
+      };
+    case 'DELETEALL/MEMO':
+      chrome.storage.sync.set({ memos: [] });
+      return {
+        memos: [],
       };
     default:
       throw new Error();
