@@ -27,10 +27,13 @@ export const Context = React.createContext(initialState);
 const reducer = (state = initialState, action: any): ClipNoteStates => {
   switch (action.type) {
     case 'GETSTOREDMEMO/MEMO':
-      if (action.value.length >= 1) {
+      if (!action.value) {
         return {
-          memos: action.value.reverse(),
+          ...state,
         };
+      }
+      if (action.value && action.value.length >= 1) {
+        return { memos: action.value.reverse() };
       }
       return {
         ...state,
@@ -39,8 +42,12 @@ const reducer = (state = initialState, action: any): ClipNoteStates => {
       if (action.value) {
         chrome.storage.sync.get('memos', function (result) {
           const { memos } = result;
-          memos.push(action.value);
-          chrome.storage.sync.set({ memos });
+          if (Array.isArray(memos) && memos.length >= 1) {
+            memos.push(action.value);
+            chrome.storage.sync.set({ memos });
+            return;
+          }
+          chrome.storage.sync.set({ memos: [action.value] });
         });
       }
       if (action.value) {
