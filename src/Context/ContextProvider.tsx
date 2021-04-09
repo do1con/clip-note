@@ -9,7 +9,7 @@ type ClipNoteStates = {
 const initialState: ClipNoteStates = {
   memos: [
     `README.txt
-1. Clip Note is developed by Kim Seongsoo. kss7547@gmail.com
+1. Developer Email address: kss7547@gmail.com
 2. Your memos will stored in Google Account. If You want further infomations, check on https://support.google.com/chrome/answer/165139?co=GENIE.Platform%3DDesktop&hl=en
 3. Clip Note does not fully guarantee your notes. It just saves your notes to your Google Account.
 So, if it's really important information, ex) bank account password, bitcoin account information, etc.
@@ -62,13 +62,19 @@ const reducer = (state = initialState, action: any): ClipNoteStates => {
     case 'EDIT/MEMO':
       chrome.storage.sync.get('memos', function (result) {
         const { memos } = result;
+        let memosCopy = memos;
+        if (Array.isArray(memos) && memos.length >= 1) {
+          memosCopy = memosCopy.reverse();
+        }
         chrome.storage.sync.set({
-          memos: memos.map((memo: string, index: number) => {
-            if (index === action.index) {
-              return action.value;
-            }
-            return memo;
-          }),
+          memos: memosCopy
+            .map((memo: string, index: number) => {
+              if (index === action.index) {
+                return action.value;
+              }
+              return memo;
+            })
+            .reverse(),
         });
       });
       return {
@@ -83,7 +89,13 @@ const reducer = (state = initialState, action: any): ClipNoteStates => {
     case 'DELETE/MEMO':
       chrome.storage.sync.get('memos', function (result) {
         const { memos } = result;
-        chrome.storage.sync.set({ memos: memos.filter((memo: string, index: number) => index !== action.deleteIndex) });
+        let memosCopy = memos;
+        if (Array.isArray(memos) && memos.length >= 1) {
+          memosCopy = memosCopy.reverse();
+        }
+        chrome.storage.sync.set({
+          memos: memosCopy.filter((memo: string, index: number) => index !== action.deleteIndex).reverse(),
+        });
       });
       return {
         ...state,
